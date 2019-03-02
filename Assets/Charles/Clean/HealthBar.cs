@@ -6,8 +6,8 @@ public class HealthBar : MonoBehaviour
 {
     public GameObject player;
 
-    float currentOxygen = 100f;
-    float maxOxygen = 100f;
+    public float currentOxygen = 100f;
+    public float maxOxygen = 100f;
     public float multiplier = 0.2f;
 
     float currentTime;
