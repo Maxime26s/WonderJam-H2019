@@ -4,14 +4,15 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject player;
-    public GameObject planete;
+    public Animator animator;
+    public GameObject player, planete;
     public float speed = 5.0f;
-    public bool playerCollideRight;
-    public bool playerCollideLeft;
+    public bool playerCollideRight, playerCollideLeft;
     public bool grounded=true;
     public Direction direction;
     public float vi, vf, yi, yf, a, ti,tf;
+    public bool action;
+    public float timerAction;
 
     // Start is called before the first frame update
     void Start()
@@ -22,28 +23,50 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.A) && !playerCollideRight)
+        if (!action)
         {
-            planete.transform.eulerAngles = new Vector3(0, 0, planete.transform.eulerAngles.z - speed);
-            direction = Direction.right;
-            player.GetComponent<SpriteRenderer>().flipX = true;
+            if (Input.GetKey(KeyCode.A) && !playerCollideRight)
+            {
+                planete.transform.eulerAngles = new Vector3(0, 0, planete.transform.eulerAngles.z - speed);
+                direction = Direction.right;
+                player.GetComponent<SpriteRenderer>().flipX = true;
+                animator.SetBool("running", true);
+            }
+
+            else if (Input.GetKey(KeyCode.D) && !playerCollideLeft)
+            {
+                planete.transform.eulerAngles = new Vector3(0, 0, planete.transform.eulerAngles.z + speed);
+                direction = Direction.left;
+                player.GetComponent<SpriteRenderer>().flipX = false;
+                animator.SetBool("running", true);
+            }
+  
+            else
+                animator.SetBool("running", false);
+
+            if (Input.GetKey(KeyCode.Space) && grounded)
+            {
+                initFall(4);
+                animator.SetBool("jumping", true);
+            }
+
+            if (!grounded)
+            {
+                vf = vi + a * (Time.time - ti);
+                player.transform.position = new Vector3(0, yi + (vi + vf) * (Time.time - ti) / 2, 0);
+            }
         }
 
-        else if (Input.GetKey(KeyCode.D) && !playerCollideLeft)
+        if (Input.GetKey(KeyCode.E))
         {
-            planete.transform.eulerAngles = new Vector3(0, 0, planete.transform.eulerAngles.z + speed);
-            direction = Direction.left;
-            player.GetComponent<SpriteRenderer>().flipX = false;
+            timerAction = Time.time;
+            action = true;
+            animator.SetBool("action", true);
         }
-
-        if (Input.GetKey(KeyCode.Space) && grounded)
+        if (action&&Time.time-timerAction>3)
         {
-            initFall(4);
-        }
-        if (!grounded)
-        {
-            vf = vi + a * (Time.time - ti);
-            player.transform.position = new Vector3(0, yi+ (vi + vf) * (Time.time - ti) / 2,0);
+            action = false;
+            animator.SetBool("action", false);
         }
     }
 
