@@ -7,6 +7,8 @@ TagManager:
   - floor
   - wall
   - ceiling
+  - key item
+  - air
   layers:
   - Default
   - TransparentFX
