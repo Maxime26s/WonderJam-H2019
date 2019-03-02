@@ -15,6 +15,7 @@ public class ColliderScript : MonoBehaviour
                 {
                     gameManager.GetComponent<GameManager>().grounded = true;
                     gameManager.GetComponent<GameManager>().vf = 0;
+                    gameManager.GetComponent<GameManager>().animator.SetBool("jumping", false);
                 }
                 Debug.Log("floor");
                 break;
@@ -61,5 +62,19 @@ public class ColliderScript : MonoBehaviour
                 break;
         }
         Debug.Log("Trol2l");
+    }
+
+    private void OnTriggerStay2D(Collider2D col)
+    {
+        switch (col.tag)
+        {
+            case "action":
+                if (Input.GetKey(KeyCode.E))
+                {
+                    gameManager.GetComponent<GameManager>().animator.SetBool("action", true);
+                }
+                Debug.Log("action");
+                break;
+        }
     }
 }
