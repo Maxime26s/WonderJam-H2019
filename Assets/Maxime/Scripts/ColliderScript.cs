@@ -34,8 +34,21 @@ public class ColliderScript : MonoBehaviour
                     gameManager.GetComponent<GameManager>().playerCollideRight = true;
                 Debug.Log("wall");
                 break;
+            case "key item":
+                for (int i = 0; i < gameManager.GetComponent<GameManager>().inventory.Length; i++)
+                    if (gameManager.GetComponent<GameManager>().inventory[i] == null)
+                    {
+                        gameManager.GetComponent<GameManager>().inventory[i] = col.transform.gameObject;
+                        gameManager.GetComponent<GameManager>().inventory[i].transform.parent = null;
+                        i = 7;
+                    }
+                col.enabled = false;
+                break;
+            case "air":
+                gameManager.GetComponent<GameManager>().interactable = col.gameObject;
+                break;
         }
-            
+
         Debug.Log("Troll");
     }
 
@@ -60,21 +73,10 @@ public class ColliderScript : MonoBehaviour
                     gameManager.GetComponent<GameManager>().playerCollideRight = false;
                 Debug.Log("wall");
                 break;
-        }
-        Debug.Log("Trol2l");
-    }
-
-    private void OnTriggerStay2D(Collider2D col)
-    {
-        switch (col.tag)
-        {
-            case "action":
-                if (Input.GetKey(KeyCode.E))
-                {
-                    gameManager.GetComponent<GameManager>().animator.SetBool("action", true);
-                }
-                Debug.Log("action");
+            case "air":
+                gameManager.GetComponent<GameManager>().interactable = null;
                 break;
         }
+        Debug.Log("Trol2l");
     }
 }
