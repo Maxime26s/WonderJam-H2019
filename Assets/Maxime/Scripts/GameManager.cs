@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject oxygenBar;
     public Animator animator;
     public GameObject player, planete, right, left;
     public float speed = 5.0f;
@@ -78,7 +77,6 @@ public class GameManager : MonoBehaviour
                             interactable.GetComponent<Items>().used = true;
                             interactable.GetComponent<Items>().time = Time.time;
                             interactable.GetComponent<CircleCollider2D>().enabled = false;
-                            oxygenBar.GetComponent<HealthBar>().collectingOxygen = true;
                             break;
                     }
             }
