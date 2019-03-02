@@ -1,20 +1,26 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class HealthBar : MonoBehaviour
 {
     public GameObject player;
+    public Animator animator;
+    public Scene sceneMort;
+    public Image noir;
 
-    float currentOxygen = 100f;
-    float maxOxygen = 100f;
+
+    public float currentOxygen = 100f;
+    public float maxOxygen = 100f;
     public float multiplier = 0.2f;
 
     float currentTime;
     float oldTime;
 
-    bool isDead = false;
-    bool collectingOxygen = false;
+    public bool isDead = false;
+    public bool collectingOxygen = false;
 
     public Sprite[] bars;
 
@@ -24,6 +30,7 @@ public class HealthBar : MonoBehaviour
     {
         currentTime = Time.deltaTime;
         oldTime = Time.deltaTime;
+        noir.color = new Color(1, 1, 1, 0);
     }
 
     // Update is called once per frame
@@ -39,6 +46,7 @@ public class HealthBar : MonoBehaviour
         {
             currentOxygen = 100;
             oldTime = Time.deltaTime;
+            collectingOxygen = false;
         }
 
         if (currentOxygen >= 10 * (100 /bars.Length))
@@ -108,6 +116,22 @@ public class HealthBar : MonoBehaviour
     void Death()
     {
         player.GetComponent<GameManager>().enabled = false;
+        
+        StartCoroutine(FadeImage(true));
+
+        SceneManager.LoadScene("Mort", LoadSceneMode.Single);
 
     }
-}
+
+       
+
+        IEnumerator FadeImage(bool fadeAway)
+        {
+        for (float i = 0; i <= 1; i += Time.deltaTime)
+        {
+            // set color with i as alpha
+            noir.color = new Color(1, 1, 1, i);
+            yield return null;
+        }
+    }
+    }
