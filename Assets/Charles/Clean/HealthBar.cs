@@ -107,6 +107,7 @@ public class HealthBar : MonoBehaviour
 
     void Death()
     {
-        player.GetComponent<PlayerController2>().enabled = false;
+        player.GetComponent<GameManager>().enabled = false;
+
     }
 }
