@@ -9,6 +9,7 @@ TagManager:
   - ceiling
   - key item
   - air
+  - npc
   layers:
   - Default
   - TransparentFX

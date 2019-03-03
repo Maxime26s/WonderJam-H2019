@@ -47,6 +47,9 @@ public class ColliderScript : MonoBehaviour
             case "air":
                 gameManager.GetComponent<GameManager>().interactable = col.gameObject;
                 break;
+            case "npc":
+                gameManager.GetComponent<GameManager>().interactable = col.gameObject;
+                break;
         }
 
         Debug.Log("Troll");
@@ -74,6 +77,9 @@ public class ColliderScript : MonoBehaviour
                 Debug.Log("wall");
                 break;
             case "air":
+                gameManager.GetComponent<GameManager>().interactable = null;
+                break;
+            case "npc":
                 gameManager.GetComponent<GameManager>().interactable = null;
                 break;
         }
