@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f605827220b225b459f6651dc61971aa, type: 3}
+  m_Name: Scaphandre
+  m_EditorClassIdentifier: 
+  nom: Plongeur
+  phrases:
+  - "*Bloup Bloup* Belle journ\xE9e pour faire de la plong\xE9e non? Je viens souvent
+    ici la fin de semaine pour m\u2019a\xE9rer l\u2019esprit. Vous aussi? Hmm, je
+    vois bien que non. "
+  - "Selon ce que j\u2019ai compris, vous avez eu un accident et une des pi\xE8ces
+    de votre vaisseau s\u2019est retrouv\xE9e sur cette plan\xE8te? Je peux bien mener
+    ma petite enqu\xEAt\xEAte."
+  - "Cependant, je n\u2019aurai pas le temps de nourrir ma pieuvre de compagnie, PulpeDeJus.
+    Vous aurez donc \xE0 parcourir la plan\xE8te et me ramener 5 m\xE9duses : C\u2019est
+    son repas pr\xE9f\xE9r\xE9! Bien, on se retrouve dans 10 min. Attention \xE0 l\u2019oxyg\xE8ne!"
+  - "Ah! Vous revoil\xE0! \xC7a fait beaucoup de m\xE9duses, PulpeDeJus sera contente.
+    Apr\xE8s mes recherches, j\u2019ai peut-\xEAtre une information qui pourra vous
+    aider."
+  - "Il y a un autre homme qui habite cette plan\xE8te : On l\u2019appelle \xAB Le
+    ma\xEEtre du camouflage \xBB. Comme vous pouvez l\u2019imaginer, il n\u2019est
+    pas facile \xE0 trouver."
+  - "Cependant, vous pouvez interagir avec les \xE9l\xE9ments du d\xE9cor comme les
+    coraux et les algues pour essayer de le trouver. Bonne chance!"
+  reponse: 000000000000
+  choix: []
+  required: 000001000000
+  amount: 000000000000000005000000000000000000000000000000
+  npcSprite: {fileID: 21300000, guid: 9bfe93e7a6dcd96418b79100a0c4e154, type: 3}

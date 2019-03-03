@@ -47,6 +47,10 @@ public class ColliderScript : MonoBehaviour
             case "npc":
                 gameManager.GetComponent<GameManager>().interactable = col.gameObject;
                 break;
+            case "end":
+                gameManager.GetComponent<GameManager>().raceF = Time.time;
+                gameManager.GetComponent<GameManager>().wall.SetActive(false);
+                break;
         }
     }
 
@@ -74,6 +78,9 @@ public class ColliderScript : MonoBehaviour
                 break;
             case "npc":
                 gameManager.GetComponent<GameManager>().interactable = null;
+                break;
+            case "start":
+                gameManager.GetComponent<GameManager>().raceI = Time.time;
                 break;
         }
     }
