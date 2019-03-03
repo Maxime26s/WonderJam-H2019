@@ -23,16 +23,13 @@ public class ColliderScript : MonoBehaviour
                 if (!gameManager.GetComponent<GameManager>().grounded)
                 {
                     gameManager.GetComponent<GameManager>().initFall(0);
-                    Debug.Log("ceiling2");
                 }
-                Debug.Log("ceiling");
                 break;
             case "wall":
                 if (gameManager.GetComponent<GameManager>().direction == GameManager.Direction.left)
                     gameManager.GetComponent<GameManager>().playerCollideLeft = true;
                 if (gameManager.GetComponent<GameManager>().direction == GameManager.Direction.right)
                     gameManager.GetComponent<GameManager>().playerCollideRight = true;
-                Debug.Log("wall");
                 break;
             case "key item":
                 for (int i = 0; i < gameManager.GetComponent<GameManager>().inventory.Length; i++)
@@ -51,8 +48,6 @@ public class ColliderScript : MonoBehaviour
                 gameManager.GetComponent<GameManager>().interactable = col.gameObject;
                 break;
         }
-
-        Debug.Log("Troll");
     }
 
     void OnTriggerExit2D(Collider2D col)
@@ -67,14 +62,12 @@ public class ColliderScript : MonoBehaviour
                     gameManager.GetComponent<GameManager>().ti = Time.time;
                     gameManager.GetComponent<GameManager>().yi = gameManager.GetComponent<GameManager>().player.transform.position.y;
                 }
-                Debug.Log("floor");
                 break;
             case "wall":
                 if (gameManager.GetComponent<GameManager>().playerCollideLeft)
                     gameManager.GetComponent<GameManager>().playerCollideLeft = false;
                 if (gameManager.GetComponent<GameManager>().playerCollideRight)
                     gameManager.GetComponent<GameManager>().playerCollideRight = false;
-                Debug.Log("wall");
                 break;
             case "air":
                 gameManager.GetComponent<GameManager>().interactable = null;
@@ -83,6 +76,5 @@ public class ColliderScript : MonoBehaviour
                 gameManager.GetComponent<GameManager>().interactable = null;
                 break;
         }
-        Debug.Log("Trol2l");
     }
 }

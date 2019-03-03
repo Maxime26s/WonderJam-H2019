@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 public class GameManager : MonoBehaviour
 {
+    public Planet nextPlanet;
     public Animator animator;
     public GameObject player, planete, right, left;
     public float speed = 5.0f;
@@ -18,8 +20,11 @@ public class GameManager : MonoBehaviour
     public GameObject[] inventory = new GameObject[5];
     public GameObject interactable, oxygenBar;
     public float talkCD;
-    public TextMeshProUGUI text;
-    public GameObject panel;
+    public TextMeshProUGUI text, name;
+    public GameObject panel, reponses;
+    public TextMeshProUGUI[] textChoix;
+    public Image face;
+    public bool end;
 
     // Start is called before the first frame update
     void Start()
@@ -32,24 +37,25 @@ public class GameManager : MonoBehaviour
     {
         if (!action)
         {
-            if (Input.GetKey(KeyCode.E) && grounded&&Time.time-talkCD>=1&&interactable != null)
+            if (Input.GetKey(KeyCode.E) && grounded && Time.time - talkCD >= 0.3 && interactable != null)
             {
-                    talkCD = Time.time;
-                    timerAction = Time.time;
-                    action = true;
-                    switch (interactable.tag)
-                    {
-                        case "air":
-                            animator.SetBool("action", true);
-                            use(Type.air,interactable);
-                            break;
-                        case "npc":
-                            animator.SetBool("running", false);
-                            use(Type.talk,interactable);
-                            break;
-                        default:
-                            action = false;
-                            break;
+                oxygenBar.GetComponent<HealthBar>().collectingOxygen = true;
+                talkCD = Time.time;
+                timerAction = Time.time;
+                action = true;
+                switch (interactable.tag)
+                {
+                    case "air":
+                        animator.SetBool("action", true);
+                        use(Type.air, interactable);
+                        break;
+                    case "npc":
+                        animator.SetBool("running", false);
+                        use(Type.talk, interactable);
+                        break;
+                    default:
+                        action = false;
+                        break;
                 }
             }
             else if (Input.GetKey(KeyCode.A) && !playerCollideRight)
@@ -92,8 +98,10 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            if (Input.GetKey(KeyCode.E)&& Time.time - talkCD >= 1)
+            if (Input.GetKey(KeyCode.E) && Time.time - talkCD >= 0.3)
             {
+                if (end)
+                    changeScene();
                 talkCD = Time.time;
                 actionDone = true;
             }
@@ -135,19 +143,55 @@ public class GameManager : MonoBehaviour
                 interactable.GetComponent<Items>().used = true;
                 interactable.GetComponent<Items>().time = Time.time;
                 interactable.GetComponent<CircleCollider2D>().enabled = false;
-                oxygenBar.GetComponent<HealthBar>().collectingOxygen = true;
                 oxygenBar.GetComponent<HealthBar>().currentOxygen = 100f;
                 cdAction = 3;
                 GetComponentInParent<NearDeath>().black.color = new Color(GetComponentInParent<NearDeath>().black.color.r, GetComponentInParent<NearDeath>().black.color.g, GetComponentInParent<NearDeath>().black.color.b, 0f);
                 GetComponentInParent<NearDeath>().red.color = new Color(GetComponentInParent<NearDeath>().red.color.r, GetComponentInParent<NearDeath>().red.color.g, GetComponentInParent<NearDeath>().red.color.b, 0f);
                 break;
             case Type.talk:
+                bool required = false;
+                if (gameObject.GetComponent<DialogDisplayer>().currentNPC.required[gameObject.GetComponent<DialogDisplayer>().nbTalk])
+                {
+                    required = true;
+                    int nb=0;
+                    for (int i = 0; i < gameObject.GetComponent<DialogDisplayer>().currentNPC.amount[gameObject.GetComponent<DialogDisplayer>().nbTalk]; i++)
+                        if (inventory[i] != null)
+                            nb++;
+                    if (nb == gameObject.GetComponent<DialogDisplayer>().currentNPC.amount[gameObject.GetComponent<DialogDisplayer>().nbTalk])
+                    {
+                        gameObject.GetComponent<DialogDisplayer>().nbTalk++;
+                        for (int i = nb - 1; i > -1; i--)
+                        {
+                            Destroy(inventory[i]);
+                            inventory[i] = null;
+                        }
+                    }    
+                }
                 panel.SetActive(true);
-                //text.SetText(gameObject.GetComponent<NPC>.npc.text[gameObject.GetComponent<NPC>.npc.nbTalk]);
+                name.SetText(gameObject.GetComponent<DialogDisplayer>().currentNPC.nom);
+                face.sprite = gameObject.GetComponent<DialogDisplayer>().currentNPC.npcSprite;
+                text.SetText(gameObject.GetComponent<DialogDisplayer>().currentNPC.phrases[gameObject.GetComponent<DialogDisplayer>().nbTalk]);
+                if (gameObject.GetComponent<DialogDisplayer>().currentNPC.reponse[gameObject.GetComponent<DialogDisplayer>().nbTalk])
+                {
+                    reponses.SetActive(true);
+                    for (int i = 0; i < gameObject.GetComponent<DialogDisplayer>().currentNPC.choix.Length; i++)
+                        textChoix[i].SetText(gameObject.GetComponent<DialogDisplayer>().currentNPC.choix[i]);
+                    gameObject.GetComponent<DialogDisplayer>().nbTalk--;
+                }
+                if(required&& gameObject.GetComponent<DialogDisplayer>().currentNPC.required[gameObject.GetComponent<DialogDisplayer>().nbTalk])
+                    gameObject.GetComponent<DialogDisplayer>().nbTalk--;
+                gameObject.GetComponent<DialogDisplayer>().nbTalk++;
+                if (gameObject.GetComponent<DialogDisplayer>().nbTalk == gameObject.GetComponent<DialogDisplayer>().currentNPC.phrases.Length)
+                    end = true;
                 cdAction = 0;
                 actionDone = false;
                 break;
         }
+    }
+
+    void changeScene()
+    {
+        SceneManager.LoadScene(nextPlanet.ToString(), LoadSceneMode.Single);
     }
 
     public enum Direction
@@ -160,5 +204,16 @@ public class GameManager : MonoBehaviour
     {
         air,
         talk,
+    }
+
+    public enum Planet
+    {
+        Desert1,
+        Pyramide,
+        Desert2,
+        Eau1,
+        Cave,
+        Eau2,
+        Terre
     }
 }
