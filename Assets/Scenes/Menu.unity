@@ -517,6 +517,7 @@ GameObject:
   - component: {fileID: 207513600}
   - component: {fileID: 207513599}
   - component: {fileID: 207513603}
+  - component: {fileID: 207513604}
   m_Layer: 0
   m_Name: Canvas
   m_TagString: Untagged
@@ -559,6 +560,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9637d8c67dd2244a80719ec0f58dabe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GameIsPaused: 0
   PauseMenuUI: {fileID: 945693714}
 --- !u!114 &207513600
 MonoBehaviour:
@@ -634,6 +636,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   StartScreen: {fileID: 165536326}
   instruction: {fileID: 1529886626}
+--- !u!114 &207513604
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 207513597}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 581948ba9d10dd746bb4324e7afc4bcc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  explication: {fileID: 0}
+  menu: {fileID: 0}
+  title: {fileID: 0}
 --- !u!1 &342480114
 GameObject:
   m_ObjectHideFlags: 0
@@ -814,7 +831,7 @@ Transform:
   m_Children:
   - {fileID: 207513598}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &506165268
 GameObject:
@@ -1211,6 +1228,52 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 592041887}
   m_CullTransparentMesh: 0
+--- !u!1 &667714224
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 667714226}
+  - component: {fileID: 667714225}
+  m_Layer: 0
+  m_Name: Menu Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &667714225
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 667714224}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 581948ba9d10dd746bb4324e7afc4bcc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  explication: {fileID: 979302312}
+  menu: {fileID: 1920082872}
+  title: {fileID: 2012587242}
+--- !u!4 &667714226
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 667714224}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 239.28485, y: 289.14124, z: -6.4782057}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &945693714
 GameObject:
   m_ObjectHideFlags: 0
@@ -1386,7 +1449,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 979302315}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 667714225}
+        m_MethodName: changeSceneToGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: MenuManager.changeSceneToGame
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &979302315
@@ -1938,7 +2012,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1529886626
 GameObject:
@@ -2394,8 +2468,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 207513603}
-        m_MethodName: QuitGameMP
+      - m_Target: {fileID: 667714225}
+        m_MethodName: exit
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

@@ -11,11 +11,13 @@ public class PlayerMovement : MonoBehaviour
     public float runSpeed = 40f;
     bool jump = false;
     public bool action = false;
+    public GameObject pauseScript;
+    public bool paused = false;
 
     // Update is called once per frame
     void Update()
     {
-        if (!action)
+        if (!action && GetComponent<PauseMenu>().GameIsPaused == false)
         {
             horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
             if (Mathf.Abs(horizontalMove) > 0.1)

@@ -51,6 +51,10 @@ public class ColliderScript : MonoBehaviour
                 gameManager.GetComponent<GameManager>().raceF = Time.time;
                 gameManager.GetComponent<GameManager>().wall.SetActive(false);
                 break;
+            case "bye":
+                gameManager.GetComponent<GameManager>().time = Time.time;
+                gameManager.GetComponent<GameManager>().end2 = true;
+                break;
         }
     }
 
