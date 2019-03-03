@@ -11,10 +11,11 @@ public class GameManager : MonoBehaviour
     public bool grounded = true;
     public Direction direction;
     public float vi, vf, yi, yf, a, ti, tf;
-    public bool action;
-    public float timerAction;
+    public bool action, actionDone;
+    public float timerAction, cdAction;
     public GameObject[] inventory = new GameObject[5];
-    public GameObject interactable;
+    public GameObject interactable, oxygenBar;
+    public float talkCD;
 
     // Start is called before the first frame update
     void Start()
@@ -27,7 +28,27 @@ public class GameManager : MonoBehaviour
     {
         if (!action)
         {
-            if (Input.GetKey(KeyCode.A) && !playerCollideRight)
+            if (Input.GetKey(KeyCode.E) && grounded&&Time.time-talkCD>=1&&interactable != null)
+            {
+                    talkCD = Time.time;
+                    timerAction = Time.time;
+                    action = true;
+                    switch (interactable.tag)
+                    {
+                        case "air":
+                            animator.SetBool("action", true);
+                            use(Type.air);
+                            break;
+                        case "npc":
+                            animator.SetBool("running", false);
+                            use(Type.talk);
+                            break;
+                        default:
+                            action = false;
+                            break;
+                }
+            }
+            else if (Input.GetKey(KeyCode.A) && !playerCollideRight)
             {
                 planete.transform.eulerAngles = new Vector3(0, 0, planete.transform.eulerAngles.z - speed);
                 direction = Direction.right;
@@ -64,30 +85,24 @@ public class GameManager : MonoBehaviour
                 vf = vi + a * (Time.time - ti);
                 player.transform.position = new Vector3(0, yi + (vi + vf) * (Time.time - ti) / 2, 0);
             }
-            if (Input.GetKey(KeyCode.E) && grounded)
+        }
+        else
+        {
+            if (Input.GetKey(KeyCode.E)&& Time.time - talkCD >= 1)
             {
-                timerAction = Time.time;
-                action = true;
-                animator.SetBool("action", true);
-                if (interactable != false)
-                    switch (interactable.tag)
-                    {
-                        case "air":
-                            use(Type.air);
-                            interactable.GetComponent<Items>().used = true;
-                            interactable.GetComponent<Items>().time = Time.time;
-                            interactable.GetComponent<CircleCollider2D>().enabled = false;
-                            break;
-                    }
+                talkCD = Time.time;
+                actionDone = true;
+            }
+            if (Time.time - timerAction > cdAction && actionDone)
+            {
+                action = false;
+                oxygenBar.GetComponent<HealthBar>().collectingOxygen = false;
+                animator.SetBool("action", false);
+                grounded = true;
+                actionDone = false;
             }
         }
 
-        if (action && Time.time - timerAction > 3)
-        {
-            action = false;
-            animator.SetBool("action", false);
-            grounded = true;
-        }
         for (int i = 0; i < inventory.Length; i++)
             if (inventory[i] != null)
             {
@@ -111,11 +126,20 @@ public class GameManager : MonoBehaviour
         switch (type)
         {
             case Type.air:
+                interactable.GetComponent<Items>().used = true;
+                interactable.GetComponent<Items>().time = Time.time;
+                interactable.GetComponent<CircleCollider2D>().enabled = false;
+                oxygenBar.GetComponent<HealthBar>().collectingOxygen = true;
+                oxygenBar.GetComponent<HealthBar>().currentOxygen = 100f;
+                cdAction = 3;
+                GetComponentInParent<NearDeath>().black.color = new Color(GetComponentInParent<NearDeath>().black.color.r, GetComponentInParent<NearDeath>().black.color.g, GetComponentInParent<NearDeath>().black.color.b, 0f);
+                GetComponentInParent<NearDeath>().red.color = new Color(GetComponentInParent<NearDeath>().red.color.r, GetComponentInParent<NearDeath>().red.color.g, GetComponentInParent<NearDeath>().red.color.b, 0f);
                 break;
             case Type.talk:
+                cdAction = 0;
+                actionDone = false;
                 break;
         }
-
     }
 
     public enum Direction

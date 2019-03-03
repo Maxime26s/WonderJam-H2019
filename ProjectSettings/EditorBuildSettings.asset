@@ -8,10 +8,13 @@ EditorBuildSettings:
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000
-  - enabled: 1
-    path: Assets/Scenes/Instructions.unity
-    guid: f33b4e87c8f7ee74c9ccdc01caca4eea
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
   - enabled: 1
     path: Assets/Scenes/Menu.unity
     guid: 4d03c810e6a4b714c81cac5a0f99e01b
+  - enabled: 1
+    path: Assets/Scenes/VictoryRoyal.unity
+    guid: 6a149eb2ac3bd0546ad891eb404683ce
   m_configObjects: {}
