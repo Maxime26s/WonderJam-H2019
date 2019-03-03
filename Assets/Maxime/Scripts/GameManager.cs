@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -16,6 +18,8 @@ public class GameManager : MonoBehaviour
     public GameObject[] inventory = new GameObject[5];
     public GameObject interactable, oxygenBar;
     public float talkCD;
+    public TextMeshProUGUI text;
+    public GameObject panel;
 
     // Start is called before the first frame update
     void Start()
@@ -37,11 +41,11 @@ public class GameManager : MonoBehaviour
                     {
                         case "air":
                             animator.SetBool("action", true);
-                            use(Type.air);
+                            use(Type.air,interactable);
                             break;
                         case "npc":
                             animator.SetBool("running", false);
-                            use(Type.talk);
+                            use(Type.talk,interactable);
                             break;
                         default:
                             action = false;
@@ -95,6 +99,8 @@ public class GameManager : MonoBehaviour
             }
             if (Time.time - timerAction > cdAction && actionDone)
             {
+                panel.SetActive(false);
+                text.SetText("");
                 action = false;
                 oxygenBar.GetComponent<HealthBar>().collectingOxygen = false;
                 animator.SetBool("action", false);
@@ -121,7 +127,7 @@ public class GameManager : MonoBehaviour
         yi = player.transform.position.y;
     }
 
-    public void use(Type type)
+    public void use(Type type, GameObject gameObject)
     {
         switch (type)
         {
@@ -136,6 +142,8 @@ public class GameManager : MonoBehaviour
                 GetComponentInParent<NearDeath>().red.color = new Color(GetComponentInParent<NearDeath>().red.color.r, GetComponentInParent<NearDeath>().red.color.g, GetComponentInParent<NearDeath>().red.color.b, 0f);
                 break;
             case Type.talk:
+                panel.SetActive(true);
+                //text.SetText(gameObject.GetComponent<NPC>.npc.text[gameObject.GetComponent<NPC>.npc.nbTalk]);
                 cdAction = 0;
                 actionDone = false;
                 break;
