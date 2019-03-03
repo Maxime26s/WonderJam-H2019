@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
     public Direction direction;
     public float vi, vf, yi, yf, a, ti, tf;
     public bool action, actionDone;
-    public float timerAction, cdAction, time, transparent;
+    public float timerAction, cdAction, time, transparent,transparent2;
     public GameObject[] inventory = new GameObject[5];
     public GameObject interactable, oxygenBar;
     public float talkCD;
@@ -24,11 +24,13 @@ public class GameManager : MonoBehaviour
     public GameObject panel, reponses;
     public TextMeshProUGUI[] textChoix;
     public Image face, black2;
-    public bool end,end2;
+    public bool end, end2;
     public bool answer = false;
     public float raceI, raceF;
     public GameObject start, final, wall, turbine;
-
+    public bool paused = false;
+    public GameObject kid, wife;
+    public AudioManager audioManager;
 
 
     // Start is called before the first frame update
@@ -38,126 +40,154 @@ public class GameManager : MonoBehaviour
         raceI = 0;
         raceF = 100;
 
-        if (nextPlanet==Planet.Eau1|| nextPlanet == Planet.Eau2 || nextPlanet == Planet.Cave|| nextPlanet == Planet.Terre|| nextPlanet == Planet.None)
+
+        if (nextPlanet == Planet.Eau1 || nextPlanet == Planet.Eau2 || nextPlanet == Planet.Cave || nextPlanet == Planet.Terre)
         {
             animator.SetBool("horse", true);
             if (nextPlanet == Planet.Eau1 || nextPlanet == Planet.Terre)
                 inventory[0] = turbine;
         }
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (end2)
+        if (GetComponent<PauseMenu>().GameIsPaused)
         {
-            transparent += 0.33f * Time.deltaTime;
-            black2.color = new Color(0f, 0f, 0f, transparent);
-            if (Time.time - time >= 3)
-                changeScene();
+            oxygenBar.GetComponent<HealthBar>().collectingOxygen = true;
         }
         else
         {
-            if (!action)
+            oxygenBar.GetComponent<HealthBar>().collectingOxygen = false;
+            if (end2)
             {
-                if (Input.GetKey(KeyCode.E) && grounded && Time.time - talkCD >= 0.3 && interactable != null)
-                {
-                    oxygenBar.GetComponent<HealthBar>().collectingOxygen = true;
-                    talkCD = Time.time;
-                    timerAction = Time.time;
-                    action = true;
-                    switch (interactable.tag)
-                    {
-                        case "air":
-                            animator.SetBool("action", true);
-                            use(Type.air, interactable);
-                            break;
-                        case "npc":
-                            animator.SetBool("running", false);
-                            use(Type.talk, interactable);
-                            break;
-                        default:
-                            action = false;
-                            break;
-                    }
-                }
-                else if (Input.GetKey(KeyCode.A) && !playerCollideRight)
-                {
-                    planete.transform.eulerAngles = new Vector3(0, 0, planete.transform.eulerAngles.z - speed);
-                    direction = Direction.right;
-                    player.GetComponent<SpriteRenderer>().flipX = true;
-                    animator.SetBool("running", true);
-                    for (int i = 0; i < inventory.Length; i++)
-                        if (inventory[i] != null)
-                            inventory[i].transform.position = Vector3.MoveTowards(inventory[0].transform.position, right.transform.position, 0.0225f);
-
-                }
-
-                else if (Input.GetKey(KeyCode.D) && !playerCollideLeft)
-                {
-                    planete.transform.eulerAngles = new Vector3(0, 0, planete.transform.eulerAngles.z + speed);
-                    direction = Direction.left;
-                    player.GetComponent<SpriteRenderer>().flipX = false;
-                    animator.SetBool("running", true);
-                    for (int i = 0; i < inventory.Length; i++)
-                        if (inventory[i] != null)
-                            inventory[i].transform.position = Vector3.MoveTowards(inventory[0].transform.position, left.transform.position, 0.0225f);
-                }
-
-                else
-                    animator.SetBool("running", false);
-
-                if (Input.GetKey(KeyCode.Space) && grounded)
-                {
-                    initFall(4);
-                    animator.SetBool("jumping", true);
-                }
-
-                if (!grounded)
-                {
-                    vf = vi + a * (Time.time - ti);
-                    player.transform.position = new Vector3(0, yi + (vi + vf) * (Time.time - ti) / 2, 0);
-                }
+                animator.SetBool("running", false);
+                animator.SetBool("jumping", false);
+                animator.SetBool("action", false);
+                transparent += 0.33f * Time.deltaTime;
+                black2.color = new Color(1f, 1f, 1f, transparent);
+                if (Time.time - time >= 3)
+                    if (nextPlanet == Planet.None)
+                            Application.Quit();
+                    else
+                        changeScene();
             }
             else
             {
-                if (Input.GetKey(KeyCode.E) && Time.time - talkCD >= 0.3)
+                if (!action)
                 {
-                    if (end)
+                    if (Input.GetKey(KeyCode.E) && grounded && Time.time - talkCD >= 0.3 && interactable != null)
+                    {
+                        oxygenBar.GetComponent<HealthBar>().collectingOxygen = true;
+                        talkCD = Time.time;
+                        timerAction = Time.time;
+                        action = true;
+                        switch (interactable.tag)
+                        {
+                            case "air":
+                                animator.SetBool("action", true);
+                                use(Type.air, interactable);
+                                break;
+                            case "npc":
+                                animator.SetBool("running", false);
+                                use(Type.talk, interactable);
+                                break;
+                            default:
+                                action = false;
+                                break;
+                        }
+                    }
+                    else if (Input.GetKey(KeyCode.A) && !playerCollideRight)
+                    {
+                        planete.transform.eulerAngles = new Vector3(0, 0, planete.transform.eulerAngles.z - speed);
+                        direction = Direction.right;
+                        player.GetComponent<SpriteRenderer>().flipX = true;
+                        animator.SetBool("running", true);
+                        if (nextPlanet == Planet.None)
+                        {
+                            kid.GetComponent<SpriteRenderer>().flipX = false;
+                            wife.GetComponent<SpriteRenderer>().flipX = false;
+                        }
+
+                        for (int i = 0; i < inventory.Length; i++)
+                            if (inventory[i] != null)
+                                inventory[i].transform.position = Vector3.MoveTowards(inventory[0].transform.position, right.transform.position, 0.0225f);
+
+                    }
+
+                    else if (Input.GetKey(KeyCode.D) && !playerCollideLeft)
+                    {
+                        planete.transform.eulerAngles = new Vector3(0, 0, planete.transform.eulerAngles.z + speed);
+                        direction = Direction.left;
+                        player.GetComponent<SpriteRenderer>().flipX = false;
+                        animator.SetBool("running", true);
+                        if (nextPlanet == Planet.None)
+                        {
+                            kid.GetComponent<SpriteRenderer>().flipX = true;
+                            wife.GetComponent<SpriteRenderer>().flipX = true;
+                        }
+                        for (int i = 0; i < inventory.Length; i++)
+                            if (inventory[i] != null)
+                                inventory[i].transform.position = Vector3.MoveTowards(inventory[0].transform.position, left.transform.position, 0.0225f);
+                    }
+
+                    else
+                        animator.SetBool("running", false);
+
+                    if (Input.GetKey(KeyCode.Space) && grounded)
+                    {
+
+                        initFall(4);
+                        animator.SetBool("jumping", true);
+                    }
+
+                    if (!grounded)
+                    {
+                        vf = vi + a * (Time.time - ti);
+                        player.transform.position = new Vector3(0, yi + (vi + vf) * (Time.time - ti) / 2, 0);
+                    }
+                }
+                else
+                {
+                    if (Input.GetKey(KeyCode.E) && Time.time - talkCD >= 0.3)
+                    {
+                        if (end)
+                        {
+                            panel.SetActive(false);
+                            end2 = true;
+                            text.SetText("");
+                            time = Time.time;
+                        }
+
+                        else
+                        {
+                            talkCD = Time.time;
+                            actionDone = true;
+                        }
+
+                    }
+                    if (Time.time - timerAction > cdAction && actionDone)
                     {
                         panel.SetActive(false);
-                        end2 =true;
                         text.SetText("");
+                        action = false;
+                        oxygenBar.GetComponent<HealthBar>().collectingOxygen = false;
+                        animator.SetBool("action", false);
+                        grounded = true;
+                        actionDone = false;
                     }
-                        
-                    else
+                }
+
+                for (int i = 0; i < inventory.Length; i++)
+                    if (inventory[i] != null)
                     {
-                    talkCD = Time.time;
-                    actionDone = true;
+                        if (i == 0)
+                            inventory[0].transform.position = Vector3.MoveTowards(inventory[0].transform.position, player.transform.position, 0.02f);
+                        else
+                            inventory[i].transform.position = Vector3.MoveTowards(inventory[i].transform.position, inventory[i - 1].transform.position, 0.02f - 0.0025f * i);
                     }
-
-                }
-                if (Time.time - timerAction > cdAction && actionDone)
-                {
-                    panel.SetActive(false);
-                    text.SetText("");
-                    action = false;
-                    oxygenBar.GetComponent<HealthBar>().collectingOxygen = false;
-                    animator.SetBool("action", false);
-                    grounded = true;
-                    actionDone = false;
-                }
             }
-
-            for (int i = 0; i < inventory.Length; i++)
-                if (inventory[i] != null)
-                {
-                    if (i == 0)
-                        inventory[0].transform.position = Vector3.MoveTowards(inventory[0].transform.position, player.transform.position, 0.02f);
-                    else
-                        inventory[i].transform.position = Vector3.MoveTowards(inventory[i].transform.position, inventory[i - 1].transform.position, 0.02f - 0.0025f * i);
-                }
         }
     }
 
@@ -196,14 +226,15 @@ public class GameManager : MonoBehaviour
                         panel.SetActive(true);
                         nom.SetText(gameObject.GetComponent<DialogDisplayer>().currentNPC.nom);
                         face.sprite = gameObject.GetComponent<DialogDisplayer>().currentNPC.npcSprite;
-                        text.SetText("Huhuhu! Bravo Bravo! La pièce n’est pas sur moi cependant. Je l’ai entreposée dans la pyramide.");
+                        text.SetText("Huhuhu! Bravo Bravo! La pièce n’est cependant pas sur moi. Je l’ai entreposée dans la pyramide.");
 
                     }
-                    else if(speed==0.9f){
+                    else if (speed == 0.9f)
+                    {
                         panel.SetActive(true);
                         nom.SetText(gameObject.GetComponent<DialogDisplayer>().currentNPC.nom);
                         face.sprite = gameObject.GetComponent<DialogDisplayer>().currentNPC.npcSprite;
-                        text.SetText("C’est le plus vite que vous pouvez faire !!!Mes marches de santé sont plus rapides que ça.Revenez me voir quand vous êtes prêt.");
+                        text.SetText("C’est le plus vite que vous pouvez faire !!! Mes marches de santé sont plus rapides que ça. Revenez me voir quand vous êtes prêt.");
                     }
                     else
                     {
@@ -215,11 +246,11 @@ public class GameManager : MonoBehaviour
                         final.SetActive(true);
                         wall.SetActive(true);
                         speed = 0.9f;
-                    
-                    panel.SetActive(true);
-                    nom.SetText(gameObject.GetComponent<DialogDisplayer>().currentNPC.nom);
-                    face.sprite = gameObject.GetComponent<DialogDisplayer>().currentNPC.npcSprite;
-                    text.SetText(gameObject.GetComponent<DialogDisplayer>().currentNPC.phrases[gameObject.GetComponent<DialogDisplayer>().nbTalk]);
+
+                        panel.SetActive(true);
+                        nom.SetText(gameObject.GetComponent<DialogDisplayer>().currentNPC.nom);
+                        face.sprite = gameObject.GetComponent<DialogDisplayer>().currentNPC.npcSprite;
+                        text.SetText(gameObject.GetComponent<DialogDisplayer>().currentNPC.phrases[gameObject.GetComponent<DialogDisplayer>().nbTalk]);
                     }
                 }
 

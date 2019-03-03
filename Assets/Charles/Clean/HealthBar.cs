@@ -34,6 +34,7 @@ public class HealthBar : MonoBehaviour
         {
             Death();
             done = true;
+       
         }
         else if (!isDead&&!collectingOxygen)
         {

@@ -17,57 +17,65 @@ public class FlatController : MonoBehaviour
 
     void Update()
     {
-        if (end)
+        if (GetComponent<PauseMenu>().GameIsPaused)
         {
-            transparent += 0.33f * Time.deltaTime;
-            black2.color = new Color(0f, 0f, 0f, transparent);
-            if (Time.time - time >= 3)
-                changeScene();
+            oxygenBar.GetComponent<HealthBar>().collectingOxygen = true;
         }
         else
         {
-            if (Input.GetKey(KeyCode.E)  && interactable != null)
+            oxygenBar.GetComponent<HealthBar>().collectingOxygen = false;
+            if (end)
+            {
+                transparent += 0.33f * Time.deltaTime;
+                black2.color = new Color(0f, 0f, 0f, transparent);
+                if (Time.time - time >= 3)
+                    changeScene();
+            }
+            else
+            {
+                if (Input.GetKey(KeyCode.E) && interactable != null)
+                {
+                    oxygenBar.GetComponent<HealthBar>().collectingOxygen = true;
+                    timerAction = Time.time;
+                    action = true;
+                    playerMovement.action = true;
+                    switch (interactable.tag)
                     {
-                        oxygenBar.GetComponent<HealthBar>().collectingOxygen = true;
-                        timerAction = Time.time;
-                        action = true;
-                        playerMovement.action = true;
-                        switch (interactable.tag)
-                        {
-                            case "air":
-                                animator.SetBool("action", true);
-                                use(Type.air, interactable);
-                                break;
-                            case "chest":
-                                animator.SetBool("action", true);
-                                use(Type.chest, interactable);
-                                break;
-                            default:
-                                action = false;
-                                playerMovement.action = false;
-                                break;
-                        }
+                        case "air":
+                            animator.SetBool("action", true);
+                            use(Type.air, interactable);
+                            break;
+                        case "chest":
+                            animator.SetBool("action", true);
+                            use(Type.chest, interactable);
+                            break;
+                        default:
+                            action = false;
+                            playerMovement.action = false;
+                            break;
                     }
-                    if (Input.GetKey(KeyCode.E))
+                }
+                if (Input.GetKey(KeyCode.E))
+                {
+                    actionDone = true;
+                }
+                if (Time.time - timerAction > cdAction && actionDone)
+                {
+                    action = false;
+                    playerMovement.action = false;
+                    oxygenBar.GetComponent<HealthBar>().collectingOxygen = false;
+                    animator.SetBool("action", false);
+                    actionDone = false;
+                }
+                for (int i = 0; i < inventory.Length; i++)
+                    if (inventory[i] != null)
                     {
-                        actionDone = true;
+                        if (i == 0)
+                            inventory[0].transform.position = Vector3.MoveTowards(inventory[0].transform.position, transform.position, 0.1f);
+                        else
+                            inventory[i].transform.position = Vector3.MoveTowards(inventory[i].transform.position, inventory[i - 1].transform.position, 0.02f - 0.0025f * i);
                     }
-                    if (Time.time - timerAction > cdAction && actionDone)
-                    {
-                        action = false;
-                        playerMovement.action = false;
-                        oxygenBar.GetComponent<HealthBar>().collectingOxygen = false;
-                        animator.SetBool("action", false);
-                        actionDone = false;
-                    }
-                    for (int i = 0; i < inventory.Length; i++)
-                        if (inventory[i] != null)
-                        {
-                            if (i == 0)
-                                inventory[0].transform.position = Vector3.MoveTowards(inventory[0].transform.position, transform.position, 0.1f);
-                            else
-                                inventory[i].transform.position = Vector3.MoveTowards(inventory[i].transform.position, inventory[i - 1].transform.position, 0.02f - 0.0025f * i);
-                        }
+            }
         }
             
         
@@ -97,6 +105,7 @@ public class FlatController : MonoBehaviour
                 }
                 break;
         }
+
     }
 
     void OnTriggerEnter2D(Collider2D col)
