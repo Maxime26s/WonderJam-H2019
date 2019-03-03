@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f605827220b225b459f6651dc61971aa, type: 3}
+  m_Name: Astronaute
+  m_EditorClassIdentifier: 
+  nom: Astronaute
+  phrases:
+  - Bonjour jeune voyageur.
+  - "Votre vaisseau s'est \xE9cras\xE9."
+  - "Trouvez les pi\xE8ces."
+  - Bonne Chance
+  npcSprite: {fileID: 0}

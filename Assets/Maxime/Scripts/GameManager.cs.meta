@@ -3,7 +3,19 @@ guid: 55db50c1e8dc3a94794e351e2780ef37
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - animator: {instanceID: 0}
+  - player: {instanceID: 0}
+  - planete: {instanceID: 0}
+  - right: {instanceID: 0}
+  - left: {instanceID: 0}
+  - interactable: {instanceID: 0}
+  - oxygenBar: {instanceID: 0}
+  - text: {instanceID: 0}
+  - name: {instanceID: 0}
+  - panel: {instanceID: 0}
+  - reponses: {instanceID: 0}
+  - face: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
