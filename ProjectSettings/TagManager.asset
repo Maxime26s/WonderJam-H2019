@@ -10,6 +10,10 @@ TagManager:
   - key item
   - air
   - npc
+  - chest
+  - start
+  - end
+  - ball
   layers:
   - Default
   - TransparentFX

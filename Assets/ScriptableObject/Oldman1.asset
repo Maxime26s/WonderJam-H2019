@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f605827220b225b459f6651dc61971aa, type: 3}
+  m_Name: Oldman1
+  m_EditorClassIdentifier: 
+  nom: Vieillard
+  phrases:
+  - "Hehehe, on a de la visite \xE0 ce que je vois. C\u2019est plut\xF4t rare dans
+    le coin, disons que cet endroit est quelque peu\u2026 aride."
+  - "En effet, cette plan\xE8te est tr\xE8s pauvre en oxyg\xE8ne. Vous pouvez voir
+    votre niveau d\u2019oxyg\xE8ne en haut \xE0 droite. Plus les secondes avancent,
+    plus votre oxyg\xE8ne diminue."
+  - "Vous voyez ces petites bulles? Ce sont des bulles d\u2019air. Pour en r\xE9cup\xE9rer,
+    il suffit de vous positionner dessus et d\u2019appuyer sur la touche d'interaction
+    \u201CE\u201D."
+  - "D\u2019ailleurs, vous pouvez interagir avec toutes les personnes que vous rencontrerez
+    ce qui permettra de leur parler."
+  - "Revenons \xE0 nos moutons\u2026 Vous m\u2019avez demand\xE9 si j\u2019avais vu
+    une de vos pi\xE8ces? Hmm le seul objet que j\u2019ai trouv\xE9 sur cette plan\xE8te
+    est un objet servant \xE0 faire cuire mes saucisses.  "
+  - "Maintenant que j\u2019y pense, il ressemble \xE9trangement \xE0 un r\xE9acteur
+    de fus\xE9e. Je peux vous l\u2019\xE9changer, mais vous devez d\u2019abord r\xE9soudre
+    mon \xE9nigme : Combien a-t-il de bras de cactus sur la plan\xE8te? "
+  - "Vous allez donc aller le promener, si vous r\xE9ussissez \xE0 faire le tour de
+    cette plan\xE8te en moins de x secondes, je consid\xE9rerai peut-\xEAtre vous
+    donner la pi\xE8ce."
+  - "Quoi, c\u2019est un bien maigre prix \xE0 payer pour une pi\xE8ce de machinerie
+    aussi dispendieuse. Allez!"
+  - "Vous allez donc aller le promener, si vous r\xE9ussissez \xE0 faire le tour de
+    cette plan\xE8te en moins de x secondes, je consid\xE9rerai peut-\xEAtre vous
+    donner la pi\xE8ce."
+  - "Laissez moi vous y mener... Bonne chance \xE0 l'int\xE9rieur! Hihi!"
+  reponse: 0000000000010000000000000000
+  choix:
+  - 5
+  - 6
+  - 8
+  required: 00000000000000000000
+  amount: 00000000000000000000000000000000000000000000000000000000000000000000000000000000
+  npcSprite: {fileID: 21300000, guid: e3360d4577ad99c408a6f99053318fe5, type: 3}
