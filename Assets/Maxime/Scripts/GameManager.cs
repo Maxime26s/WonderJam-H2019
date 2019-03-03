@@ -28,6 +28,7 @@ public class GameManager : MonoBehaviour
     public bool answer = false;
     public float raceI, raceF;
     public GameObject start, final, wall, turbine;
+    public GameObject bulle;
 
 
 
@@ -44,6 +45,7 @@ public class GameManager : MonoBehaviour
             if (nextPlanet == Planet.Eau1 || nextPlanet == Planet.Terre)
                 inventory[0] = turbine;
         }
+        bulle.SetActive(false);
         
     }
 
@@ -61,6 +63,14 @@ public class GameManager : MonoBehaviour
         {
             if (!action)
             {
+                if (interactable != null)
+                {
+                    bulle.SetActive(true);
+                }
+                else
+                {
+                    bulle.SetActive(false);
+                }
                 if (Input.GetKey(KeyCode.E) && grounded && Time.time - talkCD >= 0.3 && interactable != null)
                 {
                     oxygenBar.GetComponent<HealthBar>().collectingOxygen = true;

@@ -1,12 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class MenuManager : MonoBehaviour
+public class criss : MonoBehaviour
 {
-    public Image fusee, planetes, espace;
-
     // Start is called before the first frame update
     void Start()
     {
